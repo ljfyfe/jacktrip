@@ -58,6 +58,7 @@ win32 {
   message(win32)
   CONFIG += x86 console
   QMAKE_CXXFLAGS += -D__WINDOWS_ASIO__ #-D__UNIX_JACK__ #RtAudio Flags
+  #QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++ -lpthread
   LIBS += -lWs2_32 -lOle32 #needed by rtaudio/asio
   LIBS += "../externals/includes/QTWindows/libjack.lib"
   DEFINES += __WIN_32__
@@ -125,23 +126,24 @@ win32 {
   DEPENDPATH += ../externals/rtaudio-4.1.1/include
 }
 macx | win32 {
-INCLUDEPATH += ../externals/rtaudio-4.1.1/
+INCLUDEPATH += ../externals/rtaudio-4.1.1/ \
+               ../externals/includes/
 DEPENDPATH += ../externals/rtaudio-4.1.1/
 HEADERS += ../externals/rtaudio-4.1.1/RtAudio.h
 SOURCES += ../externals/rtaudio-4.1.1/RtAudio.cpp
 }
 
 win32 {
-HEADERS += asio.h \
-           asiodrivers.h \
-           asiolist.h \
-           asiodrvr.h \
-           asiosys.h \
-           ginclude.h \
-           iasiodrv.h \
-           iasiothiscallresolver.h
-SOURCES += asio.cpp \
-           asiodrivers.cpp \
-           asiolist.cpp \
-           iasiothiscallresolver.cpp
+HEADERS += ../externals/rtaudio-4.1.1/include/asio.h \
+           ../externals/rtaudio-4.1.1/include/asiodrivers.h \
+           ../externals/rtaudio-4.1.1/include/asiolist.h \
+           ../externals/rtaudio-4.1.1/include/asiodrvr.h \
+           ../externals/rtaudio-4.1.1/include/asiosys.h \
+           ../externals/rtaudio-4.1.1/include/ginclude.h \
+           ../externals/rtaudio-4.1.1/include/iasiodrv.h \
+           ../externals/rtaudio-4.1.1/include/iasiothiscallresolver.h
+SOURCES += ../externals/rtaudio-4.1.1/include/asio.cpp \
+           ../externals/rtaudio-4.1.1/include/asiodrivers.cpp \
+           ../externals/rtaudio-4.1.1/include/asiolist.cpp \
+           ../externals/rtaudio-4.1.1/include/iasiothiscallresolver.cpp
 }

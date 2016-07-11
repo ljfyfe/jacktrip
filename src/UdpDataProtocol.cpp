@@ -47,7 +47,7 @@
 #include <cerrno>
 #include <stdexcept>
 #ifdef __WIN_32__
-#include <winsock.h>
+#include <winsock2.h>
 #endif
 #if defined (__LINUX__) || (__MAC__OSX__)
 #include <sys/socket.h> // for POSIX Sockets

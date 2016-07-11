@@ -446,12 +446,27 @@ int JackTrip::serverStart(bool timeout, int udpTimeout)
       QThread::msleep(sleepTime);
     }
   }
-  char buf[1];
+  // Get the datagram size to avoid problems with IPv6
+  qint64 datagramSize = UdpSockTemp.pendingDatagramSize();
+  char buf[datagramSize];
   // set client address
-  UdpSockTemp.readDatagram(buf, 1, &peerHostAddress, &peer_port);
+  UdpSockTemp.readDatagram(buf, datagramSize, &peerHostAddress, &peer_port);
   UdpSockTemp.close(); // close the socket
 
-  mPeerAddress = peerHostAddress.toString();
+  // Check for mappeed IPv4->IPv6 addresses that look like ::ffff:x.x.x.x
+  if (peerHostAddress.protocol() == QAbstractSocket::IPv6Protocol) {
+    bool mappedIPv4;
+    uint32_t address = peerHostAddress.toIPv4Address(&mappedIPv4);
+    // If the IPv4 address is mapped to IPv6, convert it to IPv4
+    if (mappedIPv4) {
+      QHostAddress ipv4Address = QHostAddress(address);
+      mPeerAddress = ipv4Address.toString();
+    }
+  }
+  else {
+    mPeerAddress = peerHostAddress.toString();
+  }
+
   cout << "Client Connection Received from IP : " 
        << qPrintable(mPeerAddress) << endl;
   cout << gPrintSeparator << endl;
