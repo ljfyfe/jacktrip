@@ -126,7 +126,7 @@ void UdpDataProtocol::setPeerAddress(const char* peerHostOrIP) throw(std::invali
 void UdpDataProtocol::bindSocket(QUdpSocket& UdpSocket) throw(std::runtime_error)
 {
   QMutexLocker locker(&sUdpMutex);
-
+/*
 #if defined __WIN_32__
   WORD wVersionRequested;
   WSADATA wsaData;
@@ -253,6 +253,17 @@ void UdpDataProtocol::bindSocket(QUdpSocket& UdpSocket) throw(std::runtime_error
                                   QUdpSocket::ReadOnly);
     cout << "UDP Socket Receiving in Port: " << mBindPort << endl;
     cout << gPrintSeparator << endl;
+  }
+*/
+
+  if ( !UdpSocket.bind(QHostAddress::Any, mBindPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint) ) {
+    throw std::runtime_error("Could not bind UDP socket. It may be already binded.");
+  }
+  else {
+    if ( mRunMode == RECEIVER ) {
+      cout << "UDP Socket Receiving in Port: " << mBindPort << endl;
+      cout << gPrintSeparator << endl;
+    }
   }
 
   // OLD CODE WITHOUT POSIX FIX--------------------------------------------------
