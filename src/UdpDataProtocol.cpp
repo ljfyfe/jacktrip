@@ -257,7 +257,7 @@ void UdpDataProtocol::bindSocket(QUdpSocket& UdpSocket) throw(std::runtime_error
 */
 
   if ( !UdpSocket.bind(QHostAddress::Any, mBindPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint) ) {
-    throw std::runtime_error("Could not bind UDP socket. It may be already binded.");
+    throw std::runtime_error("Could not bind UDP socket. It may already be bound.");
   }
   else {
     if ( mRunMode == RECEIVER ) {
